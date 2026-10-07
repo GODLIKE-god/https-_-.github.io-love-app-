@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О проекте — Найди свою любовь</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;1,700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        html, body { min-height: 100%; }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: #050000;
+            background-image:
+                radial-gradient(circle at 15% 20%, rgba(120, 0, 0, 0.35) 0%, transparent 50%),
+                radial-gradient(circle at 85% 80%, rgba(80, 0, 0, 0.4) 0%, transparent 55%),
+                linear-gradient(180deg, #0a0000 0%, #1a0202 40%, #0a0000 100%);
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Montserrat', sans-serif;
+            color: #e8d0d0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ============================================================
+           ФОНОВАЯ СЦЕНА ПАРКА
+           ============================================================ */
+        .park-scene {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .sky {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 75% 18%, rgba(255, 60, 60, 0.12) 0%, transparent 18%),
+                radial-gradient(circle at 75% 18%, rgba(255, 200, 200, 0.06) 0%, transparent 25%),
+                linear-gradient(180deg, #0a0000 0%, #150202 55%, #0a0000 100%);
+        }
+
+        .moon {
+            position: absolute;
+            top: 12%;
+            right: 18%;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #ffe8e0 0%, #d8a8a8 50%, #a05050 100%);
+            box-shadow:
+                0 0 40px rgba(255, 100, 100, 0.35),
+                0 0 90px rgba(255, 60, 60, 0.2);
+            opacity: 0.85;
+        }
+
+        .mountains {
+            position: absolute;
+            bottom: 22%;
+            left: 0;
+            right: 0;
+            height: 45%;
+            z-index: 1;
+        }
+
+        .mountain {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.9));
+        }
+
+        .mountain-1 {
+            left: -5%;
+            border-width: 0 320px 380px 320px;
+            border-color: transparent transparent #050000 transparent;
+            opacity: 0.95;
+        }
+        .mountain-2 {
+            left: 18%;
+            border-width: 0 260px 340px 260px;
+            border-color: transparent transparent #0a0000 transparent;
+        }
+        .mountain-3 {
+            left: 42%;
+            border-width: 0 380px 460px 380px;
+            border-color: transparent transparent #030000 transparent;
+        }
+        .mountain-4 {
+            left: 68%;
+            border-width: 0 300px 400px 300px;
+            border-color: transparent transparent #080000 transparent;
+        }
+
+        .waterfall {
+            position: absolute;
+            top: 20%;
+            width: 6px;
+            height: 60%;
+            background: linear-gradient(180deg,
+                rgba(180, 0, 0, 0.0) 0%,
+                rgba(200, 0, 0, 0.55) 15%,
+                rgba(255, 30, 40, 0.75) 50%,
+                rgba(150, 0, 0, 0.6) 85%,
+                rgba(80, 0, 0, 0.0) 100%);
+            filter: blur(1.5px);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            animation: flowDown 4s ease-in-out infinite;
+            z-index: 2;
+            opacity: 0.8;
+        }
+
+        .waterfall::after {
+            content: '';
+            position: absolute;
+            left: -2px;
+            right: -2px;
+            top: 0;
+            height: 100%;
+            background: linear-gradient(180deg,
+                rgba(255, 60, 60, 0.0) 0%,
+                rgba(255, 60, 60, 0.35) 40%,
+                rgba(255, 60, 60, 0.0) 100%);
+            filter: blur(3px);
+            animation: flowDown 3s ease-in-out infinite reverse;
+        }
+
+        @keyframes flowDown {
+            0%, 100% { transform: translateY(0); opacity: 0.7; }
+            50%      { transform: translateY(8px); opacity: 1; }
+        }
+
+        .waterfall.w1 { left: 8%;  height: 45%; top: 28%; animation-delay: 0s; }
+        .waterfall.w2 { left: 22%; height: 55%; top: 22%; animation-delay: 0.5s; width: 4px; }
+        .waterfall.w3 { left: 38%; height: 40%; top: 32%; animation-delay: 1s; width: 5px; }
+        .waterfall.w4 { left: 55%; height: 50%; top: 25%; animation-delay: 0.3s; }
+        .waterfall.w5 { left: 72%; height: 38%; top: 34%; animation-delay: 0.8s; width: 4px; }
+        .waterfall.w6 { left: 88%; height: 48%; top: 27%; animation-delay: 1.2s; }
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 28%;
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(60, 0, 0, 0.6) 0%, transparent 60%),
+                linear-gradient(180deg, #0a0000 0%, #080000 40%, #050000 100%);
+            z-index: 3;
+            box-shadow: inset 0 20px 60px rgba(0, 0, 0, 0.9);
+        }
+
+        .path {
+            position: absolute;
+            bottom: 8%;
+            left: 5%;
+            right: 5%;
+            height: 40px;
+            border-radius: 50%;
+            border-top: 2px solid rgba(180, 60, 60, 0.15);
+            filter: blur(0.5px);
+        }
+
+        .path.p1 { bottom: 12%; left: 10%; right: 40%; height: 30px; }
+        .path.p2 { bottom: 6%;  left: 35%; right: 10%; height: 35px; }
+        .path.p3 { bottom: 16%; left: 50%; right: 5%;  height: 25px; }
+
+        /* ============================================================
+           ЧЁРНО-КРАСНЫЕ РОЗЫ
+           ============================================================ */
+        .rose {
+            position: absolute;
+            z-index: 4;
+            pointer-events: none;
+            animation: roseSway 6s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        .rose::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(180deg, #2a0a0a 0%, #0a0000 100%);
+        }
+
+        .rose-bloom {
+            position: absolute;
+            bottom: 38px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%,
+                #ff2a2a 0%,
+                #a80000 45%,
+                #4a0000 80%,
+                #1a0000 100%);
+            box-shadow:
+                0 0 8px rgba(255, 0, 0, 0.6),
+                0 0 16px rgba(180, 0, 0, 0.4),
+                inset -3px -3px 6px rgba(0, 0, 0, 0.7);
+        }
+
+        .rose-bloom::before,
+        .rose-bloom::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ff4d4d, #800000 70%);
+            box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .rose-bloom::before {
+            top: -4px; left: -4px;
+            width: 14px; height: 14px;
+        }
+        .rose-bloom::after {
+            bottom: -4px; right: -4px;
+            width: 12px; height: 12px;
+        }
+
+        .rose .leaf {
+            position: absolute;
+            bottom: 18px;
+            width: 14px;
+            height: 8px;
+            background: radial-gradient(ellipse at 30% 30%, #2a0808, #0a0000);
+            border-radius: 50% 0 50% 0;
+            transform: rotate(-25deg);
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+        }
+
+        .rose .leaf.right {
+            left: calc(50% + 2px);
+            transform: rotate(25deg) scaleX(-1);
+            bottom: 22px;
+        }
+        .rose .leaf.left {
+            right: calc(50% + 2px);
+            bottom: 24px;
+        }
+
+        @keyframes roseSway {
+            0%, 100% { transform: rotate(-1.5deg); }
+            50%      { transform: rotate(1.5deg); }
+        }
+
+        /* ============================================================
+           СИЛУЭТЫ ПАР
+           ============================================================ */
+        .couple {
+            position: absolute;
+            bottom: 12%;
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0.85;
+            filter: drop-shadow(0 0 6px rgba(0, 0, 0, 1));
+        }
+
+        .couple svg {
+            display: block;
+            width: 70px;
+            height: 110px;
+        }
+
+        .couple.walk-slow { animation: walkSlow 20s linear infinite; }
+        .couple.walk-mid  { animation: walkMid 28s linear infinite; }
+        .couple.walk-far  { animation: walkFar 36s linear infinite; }
+
+        @keyframes walkSlow {
+            0%   { transform: translateX(-100px) scale(1); }
+            100% { transform: translateX(calc(100vw + 100px)) scale(1); }
+        }
+        @keyframes walkMid {
+            0%   { transform: translateX(calc(100vw + 100px)) scale(0.85) scaleX(-1); }
+            100% { transform: translateX(-100px) scale(0.85) scaleX(-1); }
+        }
+        @keyframes walkFar {
+            0%   { transform: translateX(-120px) scale(0.65); }
+            100% { transform: translateX(calc(100vw + 120px)) scale(0.65); }
+        }
+
+        /* ============================================================
+           КОНТЕНТ
+           ============================================================ */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+            padding: 3rem 1rem;
+            perspective: 1000px;
+        }
+
+        .about-wrap {
+            max-width: 720px;
+            width: 100%;
+            text-align: center;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           БОЛЬШОЕ ИНТЕРАКТИВНОЕ СЕРДЦЕ
+           ============================================================ */
+        .big-heart-stage {
+            position: relative;
+            width: min(460px, 90vw);
+            height: min(460px, 90vw);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 20px 50px rgba(255, 0, 30, 0.4));
+        }
+
+        .big-heart-stage::before {
+            content: '';
+            position: absolute;
+            inset: -40px;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                rgba(255, 30, 60, 0.25) 0%,
+                rgba(255, 0, 40, 0.1) 35%,
+                transparent 70%);
+            animation: heartHalo 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes heartHalo {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50%      { transform: scale(1.08); opacity: 1; }
+        }
+
+        .big-heart {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-style: preserve-3d;
+            animation: heartBeat 2.5s ease-in-out infinite;
+        }
+
+        .big-heart:hover {
+            transform: scale(1.05) rotateY(8deg) rotateX(-4deg);
+        }
+
+        .big-heart:active {
+            transform: scale(0.97);
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            15%      { transform: scale(1.06); }
+            30%      { transform: scale(0.99); }
+            45%      { transform: scale(1.03); }
+        }
+
+        .heart-body {
+            position: absolute;
+            inset: 0;
+            filter:
+                drop-shadow(0 0 30px rgba(255, 0, 40, 0.9))
+                drop-shadow(0 0 60px rgba(200, 0, 40, 0.6))
+                drop-shadow(0 0 100px rgba(150, 0, 30, 0.4));
+        }
+
+        .heart-body::before,
+        .heart-body::after {
+            content: '';
+            position: absolute;
+            width: 55%;
+            height: 55%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%,
+                #ff5a6e 0%,
+                #ff1e3c 25%,
+                #c0001a 55%,
+                #7a0010 80%,
+                #3a0008 100%);
+            top: 4%;
+        }
+
+        .heart-body::before { left: 4%; }
+        .heart-body::after  { right: 4%; }
+
+        .heart-body .triangle {
+            position: absolute;
+            left: 50%;
+            bottom: 6%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 51% solid transparent;
+            border-right: 51% solid transparent;
+            border-top: 72% solid #a8001a;
+            background: linear-gradient(180deg, #c0001a, #3a0008);
+            border-radius: 0 0 40% 40%;
+        }
+
+        .heart-shine {
+            position: absolute;
+            top: 22%;
+            left: 28%;
+            width: 22%;
+            height: 22%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%,
+                rgba(255, 220, 230, 0.9) 0%,
+                rgba(255, 150, 170, 0.4) 40%,
+                transparent 70%);
+            filter: blur(2px);
+            pointer-events: none;
+        }
+
+        .heart-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 22% 8%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .heart-creator {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 700;
+            font-size: clamp(1rem, 2.2vw, 1.35rem);
+            color: #ffe0e8;
+            text-shadow:
+                0 0 12px rgba(255, 100, 130, 1),
+                0 0 30px rgba(255, 0, 60, 0.8),
+                0 2px 4px rgba(0, 0, 0, 0.9);
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .heart-text p {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            font-size: clamp(0.72rem, 1.5vw, 0.9rem);
+            color: #fff;
+            text-shadow:
+                0 0 8px rgba(255, 80, 100, 0.9),
+                0 1px 3px rgba(0, 0, 0, 1);
+            line-height: 1.35;
+            margin: 0;
+            opacity: 0.95;
+            max-width: 90%;
+        }
+
+        .pulse-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff4d67, transparent 70%);
+            pointer-events: none;
+            animation: particleFloat 3s ease-out forwards;
+        }
+
+        @keyframes particleFloat {
+            0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        /* ============================================================
+           ПОДПИСЬ И КНОПКА НАЗАД
+           ============================================================ */
+        .about-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 600;
+            font-size: 1.15rem;
+            color: #d8a8b0;
+            opacity: 0.85;
+            margin: 1.5rem 0 2rem;
+            text-shadow: 0 0 10px rgba(255, 60, 90, 0.4);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ff6b7d;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            padding: 0.7rem 1.6rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 60, 90, 0.4);
+            background: rgba(15, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .back-link:hover {
+            color: #fff;
+            border-color: #ff1e3c;
+            background: rgba(80, 0, 15, 0.85);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 30, 60, 0.5);
+            text-decoration: none;
+        }
+
+        .back-link i { transition: transform 0.3s ease; }
+        .back-link:hover i { transform: translateX(-4px); }
+
+        /* ============================================================
+           ЛЕТЯЩИЕ ЛЕПЕСТКИ РОЗ
+           ============================================================ */
+        .petal {
+            position: fixed;
+            z-index: 6;
+            width: 10px;
+            height: 8px;
+            background: radial-gradient(ellipse at 30% 30%, #c0001a, #2a0000);
+            border-radius: 50% 0 50% 0;
+            opacity: 0.6;
+            pointer-events: none;
+            animation: petalFall linear infinite;
+            filter: drop-shadow(0 0 4px rgba(255, 0, 40, 0.5));
+        }
+
+        @keyframes petalFall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ============================================================
+           ФУТЕР
+           ============================================================ */
+        footer {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: #b08080;
+            text-decoration: none;
+            font-weight: 500;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            border-bottom: 1px dashed rgba(255, 40, 60, 0.4);
+            padding-bottom: 2px;
+        }
+
+        footer a:hover {
+            opacity: 1;
+            color: #ff4d67;
+            border-bottom-color: #ff1e3c;
+            letter-spacing: 0.5px;
+        }
+
+        footer i {
+            margin-right: 0.4rem;
+            color: #ff1e3c;
+        }
+
+        /* ============================================================
+           АДАПТИВНОСТЬ
+           ============================================================ */
+        @media (max-width: 576px) {
+            .heart-creator { font-size: 0.95rem; }
+            .heart-text p  { font-size: 0.7rem; line-height: 1.3; }
+            .heart-text { padding: 0 20% 10%; }
+            .about-subtitle { font-size: 1rem; margin: 1rem 0 1.5rem; }
+            .mountain-1 { border-width: 0 180px 220px 180px; }
+            .mountain-2 { border-width: 0 150px 200px 150px; }
+            .mountain-3 { border-width: 0 220px 270px 220px; }
+            .mountain-4 { border-width: 0 170px 230px 170px; }
+            .waterfall { width: 4px; }
+            .back-link { font-size: 0.9rem; padding: 0.6rem 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+         ФОНОВАЯ СЦЕНА ПАРКА
+         ============================================================ -->
+    <div class="park-scene">
+        <div class="sky"></div>
+        <div class="moon"></div>
+
+        <div class="mountains">
+            <div class="mountain mountain-1"></div>
+            <div class="mountain mountain-2"></div>
+            <div class="mountain mountain-3"></div>
+            <div class="mountain mountain-4"></div>
+        </div>
+
+        <div class="waterfall w1"></div>
+        <div class="waterfall w2"></div>
+        <div class="waterfall w3"></div>
+        <div class="waterfall w4"></div>
+        <div class="waterfall w5"></div>
+        <div class="waterfall w6"></div>
+
+        <div class="ground"></div>
+        <div class="path p1"></div>
+        <div class="path p2"></div>
+        <div class="path p3"></div>
+
+        <div class="rose" style="left: 6%;  bottom: 6%;  animation-delay: 0s;">
+            <div class="rose-bloom"></div>
+            <div class="leaf left"></div>
+            <div class="leaf right"></div>
+        </div>
+        <div class="rose" style="left: 14%; bottom: 3%;  animation-delay: 1.2s; transform: scale(0.85);">
+            <div class="rose-bloom"></div>
+            <div class="leaf left"></div>
+            <div class="leaf right"></div>
+        </div>
+        <div class="rose" style="left: 30%; bottom: 8%;  animation-delay: 0.6s; transform: scale(1.1);">
+            <div class="rose-bloom"></div>
+            <div class="leaf left"></div>
+            <div class="leaf right"></div>
+        </div>
+        <div class="rose" style="left: 48%; bottom: 4%;  animation-delay: 2s;  transform: scale(0.9);">
+            <div class="rose-bloom"></div>
+            <div class="leaf left"></div>
+            <div class="leaf right"></div>
+        </div>
+        <div class="rose" style="left: 64%; bottom: 7%;  animation-delay: 1.5s;">
+            <div class="rose-bloom"></div>
+            <div class="leaf left"></div>
+            <div class="leaf right"></div>
+        </div>
+        <div class="rose" style="left: 78%; bottom: 2%;  animation-delay: 0.4s; transform: scale(0.8);">
+            <div class="rose-bloom"></div>
+            <div class="leaf left"></div>
+            <div class="leaf right"></div>
+        </div>
+        <div class="rose" style="left: 92%; bottom: 9%;  animation-delay: 1.8s; transform: scale(1.05);">
+            <div class="rose-bloom"></div>
+            <div class="leaf left"></div>
+            <div class="leaf right"></div>
+        </div>
+
+        <!-- Близкая пара -->
+        <div class="couple walk-slow" style="bottom: 9%;">
+            <svg viewBox="0 0 70 110" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="22" cy="18" r="7" fill="#0a0000"/>
+                <path d="M16 26 Q22 24 28 26 L30 55 Q30 60 26 60 L18 60 Q14 60 14 55 Z" fill="#0a0000"/>
+                <rect x="16" y="60" width="4" height="35" fill="#0a0000"/>
+                <rect x="24" y="60" width="4" height="35" fill="#0a0000"/>
+                <circle cx="48" cy="18" r="7" fill="#0a0000"/>
+                <path d="M42 26 Q48 24 54 26 L56 55 Q56 60 52 60 L44 60 Q40 60 40 55 Z" fill="#0a0000"/>
+                <rect x="42" y="60" width="4" height="35" fill="#0a0000"/>
+                <rect x="50" y="60" width="4" height="35" fill="#0a0000"/>
+                <path d="M28 42 Q35 46 42 42" stroke="#0a0000" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <!-- Средняя пара (обратно) -->
+        <div class="couple walk-mid" style="bottom: 6%; animation-delay: 5s;">
+            <svg viewBox="0 0 70 110" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="22" cy="18" r="7" fill="#0a0000"/>
+                <path d="M16 26 Q22 24 28 26 L30 55 Q30 60 26 60 L18 60 Q14 60 14 55 Z" fill="#0a0000"/>
+                <rect x="16" y="60" width="4" height="35" fill="#0a0000"/>
+                <rect x="24" y="60" width="4" height="35" fill="#0a0000"/>
+                <circle cx="48" cy="18" r="7" fill="#0a0000"/>
+                <path d="M42 26 Q48 24 54 26 L56 55 Q56 60 52 60 L44 60 Q40 60 40 55 Z" fill="#0a0000"/>
+                <rect x="42" y="60" width="4" height="35" fill="#0a0000"/>
+                <rect x="50" y="60" width="4" height="35" fill="#0a0000"/>
+                <path d="M28 42 Q35 46 42 42" stroke="#0a0000" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <!-- Дальняя пара -->
+        <div class="couple walk-far" style="bottom: 4%; animation-delay: 12s;">
+            <svg viewBox="0 0 70 110" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="22" cy="18" r="7" fill="#0a0000"/>
+                <path d="M16 26 Q22 24 28 26 L30 55 Q30 60 26 60 L18 60 Q14 60 14 55 Z" fill="#0a0000"/>
+                <rect x="16" y="60" width="4" height="35" fill="#0a0000"/>
+                <rect x="24" y="60" width="4" height="35" fill="#0a0000"/>
+                <circle cx="48" cy="18" r="7" fill="#0a0000"/>
+                <path d="M42 26 Q48 24 54 26 L56 55 Q56 60 52 60 L44 60 Q40 60 40 55 Z" fill="#0a0000"/>
+                <rect x="42" y="60" width="4" height="35" fill="#0a0000"/>
+                <rect x="50" y="60" width="4" height="35" fill="#0a0000"/>
+                <path d="M28 42 Q35 46 42 42" stroke="#0a0000" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         ОСНОВНОЙ КОНТЕНТ
+         ============================================================ -->
+    <main>
+        <div class="about-wrap">
+
+            <div class="big-heart-stage">
+                <div class="big-heart" id="bigHeart">
+                    <div class="heart-body">
+                        <div class="triangle"></div>
+                    </div>
+                    <div class="heart-shine"></div>
+                    <div class="heart-text">
+                        <div class="heart-creator">создатель @grlarcrulx2</div>
+                        <p>«Создано в целях помочь людям найти вторую половинку: ищи людей, лайкай и после продолжай общение, либо же свайпай и иди искать дальше»</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="about-subtitle">~ тихое место, где начинаются истории ~</p>
+
+            <a href="index.html" class="back-link">
+                <i class="bi bi-arrow-left"></i>
+                Вернуться на главную
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <a href="index.html">
+            <i class="bi bi-heart"></i>
+            Сделано с любовью
+        </a>
+    </footer>
+
+    <script>
+        /* ============================================================
+           1. ЛЕТЯЩИЕ ЛЕПЕСТКИ РОЗ
+           ============================================================ */
+        (function spawnPetals() {
+            const count = 12;
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.className = 'petal';
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.animationDuration = (14 + Math.random() * 12) + 's';
+                p.style.animationDelay = (Math.random() * 20) + 's';
+                p.style.transform = `scale(${0.6 + Math.random() * 0.9})`;
+                document.body.appendChild(p);
+            }
+        })();
+
+        /* ============================================================
+           2. ИНТЕРАКТИВНОЕ СЕРДЦЕ
+           ============================================================ */
+        (function initHeartInteraction() {
+            const heart = document.getElementById('bigHeart');
+            if (!heart) return;
+
+            heart.addEventListener('click', (e) => {
+                const particleCount = 12 + Math.floor(Math.random() * 8);
+                const rect = heart.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const p = document.createElement('div');
+                    p.className = 'pulse-particle';
+
+                    const size = 6 + Math.random() * 14;
+                    p.style.width = size + 'px';
+                    p.style.height = size + 'px';
+                    p.style.left = (e.clientX || cx) + 'px';
+                    p.style.top  = (e.clientY || cy) + 'px';
+
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = 60 + Math.random() * 120;
+                    p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                    p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+
+                    p.style.animationDuration = (0.8 + Math.random() * 0.8) + 's';
+                    p.style.position = 'fixed';
+                    p.style.zIndex = '20';
+
+                    document.body.appendChild(p);
+                    setTimeout(() => p.remove(), 1800);
+                }
+
+                heart.style.animation = 'none';
+                void heart.offsetWidth;
+                heart.style.animation = 'heartBeat 0.8s ease-in-out 2';
+                setTimeout(() => {
+                    heart.style.animation = 'heartBeat 2.5s ease-in-out infinite';
+                }, 1700);
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth  - 0.5) * 8;
+                const y = (e.clientY / window.innerHeight - 0.5) * 8;
+                heart.style.setProperty('transform',
+                    `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`);
+            });
+
+            document.addEventListener('mouseleave', () => {
+                heart.style.setProperty('transform', '');
+            });
+        })();
+    </script>
+
+</body>
+</html>

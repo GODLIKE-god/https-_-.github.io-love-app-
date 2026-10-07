@@ -1,0 +1,1290 @@
+/* ============================================================
+   ВЕБ-ТРЕНАЖЁР — ЕДИНЫЙ ФАЙЛ СТИЛЕЙ (КРАСНО-ЧЁРНАЯ ТЕМА)
+   Подходит для: index.html, 2.html, 3.html, 4.html,
+                 5.html, 6.html, 7.html, 8.html, 9.html, about.html
+   ============================================================ */
+
+/* ============================================
+   0. ПОДКЛЮЧЕНИЕ ШРИФТОВ
+   ============================================ */
+/* Шрифты подключаются в HTML:
+   Bebas Neue (заголовки), Montserrat (текст), Playfair Display (акценты) */
+
+/* ============================================
+   1. ОБЩИЕ СТИЛИ
+   ============================================ */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    /* Красно-чёрный фон с несколькими слоями */
+    background: #050505;
+    background-image:
+        radial-gradient(circle at 15% 20%, rgba(200, 0, 0, 0.35) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(120, 0, 0, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(60, 0, 0, 0.5) 0%, transparent 70%),
+        linear-gradient(135deg, #0a0000 0%, #1a0000 50%, #0a0000 100%);
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* ============================================
+   2. ДЕКОРАТИВНОЕ ПУЛЬСИРУЮЩЕЕ СВЕЧЕНИЕ
+   ============================================ */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 0% 0%, rgba(255, 0, 0, 0.25), transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(180, 0, 0, 0.25), transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+    animation: pulseGlow 6s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.6; }
+    50%      { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pop {
+    0%   { transform: scale(0); }
+    60%  { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50%      { transform: translate(40px, 50px); }
+}
+
+/* ============================================
+   3. ИНТЕРАКТИВНЫЙ ФОН (CANVAS)
+   ============================================ */
+#bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ============================================
+   4. ПАРЯЩИЕ 3D-СЕРДЦА
+   ============================================ */
+.heart {
+    position: fixed;
+    z-index: 1;
+    pointer-events: none;
+    animation: floatHeart linear infinite;
+    filter: drop-shadow(0 0 12px rgba(255, 30, 60, 0.6));
+}
+
+.heart-shape {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    transform: rotate(-45deg);
+    background: linear-gradient(135deg, #ff1e3c, #a8001a);
+    border-radius: 0 0 0 8px;
+}
+
+.heart-shape::before,
+.heart-shape::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: inherit;
+    border-radius: 50%;
+}
+
+.heart-shape::before {
+    top: -20px;
+    left: 0;
+}
+
+.heart-shape::after {
+    top: 0;
+    left: 20px;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 200, 200, 0.9), transparent 60%), #a8001a;
+}
+
+@keyframes floatHeart {
+    0% {
+        transform: translateY(110vh) scale(0.6) rotate(0deg);
+        opacity: 0;
+    }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% {
+        transform: translateY(-20vh) scale(1.1) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ============================================
+   5. ОСНОВНОЙ КОНТЕНТ
+   ============================================ */
+main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 5;
+    padding: 2rem 1rem;
+    perspective: 1200px;
+}
+
+/* Карточка "матовое стекло" — красно-чёрная тема */
+.hero-card {
+    background: rgba(15, 0, 0, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 40, 60, 0.35);
+    border-radius: 28px;
+    padding: 3.5rem 3rem;
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.8),
+        0 0 60px rgba(255, 0, 40, 0.15),
+        inset 0 1px 0 rgba(255, 100, 120, 0.2);
+    max-width: 780px;
+    width: 100%;
+    text-align: center;
+    animation: fadeInUp 1s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Вращающийся отблеск на карточке */
+.hero-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, rgba(255, 0, 40, 0.08), transparent 30%);
+    animation: rotateShine 12s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes rotateShine {
+    to { transform: rotate(360deg); }
+}
+
+/* Широкая карточка для теории и заданий */
+.theory-card {
+    max-width: 900px;
+    text-align: left;
+    line-height: 1.7;
+}
+
+.theory-card h1 { font-weight: 800; }
+.theory-card h2 { font-weight: 700; margin-top: 1.5rem; }
+.theory-card p  { opacity: 0.95; }
+
+.theory-card a {
+    color: #ff6b7d;
+    text-decoration: underline;
+}
+.theory-card a:hover { color: #fff; }
+
+.theory-list {
+    padding-left: 1.2rem;
+}
+.theory-list li {
+    margin-bottom: 0.7rem;
+    opacity: 0.95;
+}
+
+.theory-card code {
+    background: rgba(0, 0, 0, 0.45);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #ff6b7d;
+    font-size: 0.9em;
+}
+
+/* ============================================
+   6. ЗАГОЛОВКИ ГЛАВНОЙ СТРАНИЦЫ
+   ============================================ */
+/* Сердечко над заголовком */
+.title-heart {
+    display: inline-block;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #ff1e3c;
+    filter: drop-shadow(0 0 20px rgba(255, 30, 60, 0.9));
+    animation: beat 1.2s ease-in-out infinite;
+    margin-bottom: 0.5rem;
+}
+
+@keyframes beat {
+    0%, 100% { transform: scale(1); }
+    25%      { transform: scale(1.25); }
+    40%      { transform: scale(0.95); }
+    60%      { transform: scale(1.15); }
+}
+
+/* ОБЪЁМНАЯ 3D-НАДПИСЬ "НАЙДИ СВОЮ ЛЮБОВЬ" */
+.love-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 9vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: 4px;
+    margin: 0.5rem 0 1.5rem;
+    color: #ff1e3c;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+    text-shadow:
+        1px 1px 0 #d10020,
+        2px 2px 0 #c0001d,
+        3px 3px 0 #b0001a,
+        4px 4px 0 #a00017,
+        5px 5px 0 #900014,
+        6px 6px 0 #800011,
+        7px 7px 0 #70000e,
+        8px 8px 0 #60000b,
+        9px 9px 0 #500008,
+        10px 10px 0 #400005,
+        12px 12px 20px rgba(0, 0, 0, 0.9),
+        0 0 30px rgba(255, 30, 60, 0.8),
+        0 0 60px rgba(255, 0, 40, 0.5),
+        0 0 100px rgba(255, 0, 40, 0.3);
+    animation: titlePulse 3s ease-in-out infinite;
+    transform-style: preserve-3d;
+}
+
+/* Верхняя подсветка надписи */
+.love-title::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    color: #ff6b7d;
+    text-shadow:
+        -1px -1px 0 #ff8a96,
+        -2px -2px 10px rgba(255, 100, 120, 0.6);
+    transform: translate(-2px, -2px);
+    filter: blur(0.5px);
+}
+
+@keyframes titlePulse {
+    0%, 100% {
+        text-shadow:
+            1px 1px 0 #d10020, 2px 2px 0 #c0001d, 3px 3px 0 #b0001a,
+            4px 4px 0 #a00017, 5px 5px 0 #900014, 6px 6px 0 #800011,
+            7px 7px 0 #70000e, 8px 8px 0 #60000b, 9px 9px 0 #500008,
+            10px 10px 0 #400005, 12px 12px 20px rgba(0, 0, 0, 0.9),
+            0 0 30px rgba(255, 30, 60, 0.8),
+            0 0 60px rgba(255, 0, 40, 0.5),
+            0 0 100px rgba(255, 0, 40, 0.3);
+    }
+    50% {
+        text-shadow:
+            1px 1px 0 #d10020, 2px 2px 0 #c0001d, 3px 3px 0 #b0001a,
+            4px 4px 0 #a00017, 5px 5px 0 #900014, 6px 6px 0 #800011,
+            7px 7px 0 #70000e, 8px 8px 0 #60000b, 9px 9px 0 #500008,
+            10px 10px 0 #400005, 12px 12px 20px rgba(0, 0, 0, 0.9),
+            0 0 45px rgba(255, 50, 80, 1),
+            0 0 90px rgba(255, 0, 40, 0.7),
+            0 0 140px rgba(255, 0, 40, 0.4);
+    }
+}
+
+/* Классические заголовки (для других страниц) */
+.hero-card h1 {
+    font-weight: 800;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.hero-card p {
+    font-size: 1.15rem;
+    opacity: 0.85;
+    margin-bottom: 2.5rem;
+    color: #e8d0d0;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+}
+
+.hero-icon {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 1rem;
+    color: #ff8c00;
+}
+
+/* ============================================
+   7. 3D-КНОПКИ (ГЛАВНАЯ)
+   ============================================ */
+.btn-group-3d {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.9rem;
+    margin-top: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.btn-3d {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.05rem 2.4rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    text-decoration: none;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.5px;
+    outline: none;
+    user-select: none;
+}
+
+/* Красная кнопка "Начать знакомиться" */
+.btn-3d-primary {
+    background: linear-gradient(180deg, #ff2d4a 0%, #c0001a 100%);
+    color: #fff;
+    box-shadow:
+        0 8px 0 #7a0010,
+        0 10px 18px rgba(0, 0, 0, 0.6),
+        0 0 35px rgba(255, 30, 60, 0.4),
+        inset 0 1px 0 rgba(255, 180, 190, 0.5);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.btn-3d-primary:hover {
+    background: linear-gradient(180deg, #ff4d67 0%, #d4001e 100%);
+    color: #fff;
+    text-decoration: none;
+    box-shadow:
+        0 8px 0 #7a0010,
+        0 12px 25px rgba(0, 0, 0, 0.65),
+        0 0 55px rgba(255, 40, 70, 0.7),
+        inset 0 1px 0 rgba(255, 200, 210, 0.6);
+}
+
+.btn-3d-primary:active {
+    transform: translateY(6px);
+    box-shadow:
+        0 2px 0 #7a0010,
+        0 4px 10px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(255, 30, 60, 0.3),
+        inset 0 1px 0 rgba(255, 180, 190, 0.5);
+}
+
+/* Тёмная кнопка "О сайте" */
+.btn-3d-secondary {
+    background: linear-gradient(180deg, #1a1a1a 0%, #050505 100%);
+    color: #ff4d67;
+    box-shadow:
+        0 8px 0 #000000,
+        0 10px 18px rgba(0, 0, 0, 0.7),
+        0 0 30px rgba(255, 30, 60, 0.15),
+        inset 0 1px 0 rgba(255, 100, 120, 0.2);
+    border: 1px solid rgba(255, 40, 60, 0.4);
+    text-shadow: 0 0 12px rgba(255, 40, 60, 0.6);
+}
+
+.btn-3d-secondary:hover {
+    background: linear-gradient(180deg, #2a0a0a 0%, #0f0000 100%);
+    color: #ff6b7d;
+    text-decoration: none;
+    box-shadow:
+        0 8px 0 #000000,
+        0 12px 25px rgba(0, 0, 0, 0.75),
+        0 0 50px rgba(255, 40, 70, 0.4),
+        inset 0 1px 0 rgba(255, 100, 120, 0.35);
+    border-color: rgba(255, 60, 80, 0.7);
+}
+
+.btn-3d-secondary:active {
+    transform: translateY(6px);
+    box-shadow:
+        0 2px 0 #000000,
+        0 4px 10px rgba(0, 0, 0, 0.6),
+        0 0 15px rgba(255, 30, 60, 0.15),
+        inset 0 1px 0 rgba(255, 100, 120, 0.2);
+}
+
+.btn-3d i {
+    font-size: 1.3rem;
+    transition: transform 0.2s ease;
+}
+
+.btn-3d:hover i {
+    transform: scale(1.2) rotate(-8deg);
+}
+
+/* ============================================
+   8. КЛАССИЧЕСКАЯ КНОПКА "НАЧАТЬ ОБУЧЕНИЕ" (для других страниц)
+   ============================================ */
+.btn-start {
+    background: #fff;
+    color: #a8001a;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0.9rem 2.5rem;
+    border-radius: 50px;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-start:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(255, 30, 60, 0.4);
+    background: #f8f9fa;
+    color: #7a0010;
+    text-decoration: none;
+}
+
+.btn-start i {
+    margin: 0 0.4rem;
+}
+
+/* ============================================
+   9. ССЫЛКА "ПРОДОЛЖИТЬ УЧИТЬСЯ"
+   ============================================ */
+.continue-link {
+    display: inline-block;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.15rem;
+    text-decoration: none;
+    padding: 0.5rem 0;
+    border-bottom: 2px dashed rgba(255, 100, 120, 0.6);
+    transition: all 0.3s ease;
+}
+
+.continue-link:hover {
+    color: #ff6b7d;
+    border-bottom-color: #ff1e3c;
+    border-bottom-style: solid;
+    letter-spacing: 0.5px;
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.continue-link i {
+    margin-left: 0.4rem;
+    transition: transform 0.3s ease;
+}
+
+.continue-link:hover i {
+    transform: translateX(5px);
+}
+
+/* ============================================
+   10. БЛОКИ ДЕМОНСТРАЦИИ
+   ============================================ */
+.demo-block {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 60, 80, 0.25);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.demo-block > * {
+    margin: 0.4rem 0.6rem 0.4rem 0;
+}
+
+.demo-cell {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(255, 80, 100, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+/* ============================================
+   11. ДВОИЧНЫЙ КОД (3.html)
+   ============================================ */
+.code-display {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 60, 80, 0.3);
+    border-radius: 16px;
+    padding: 1.5rem 1rem;
+    margin: 1.5rem 0;
+}
+
+.code-label {
+    display: block;
+    font-size: 0.9rem;
+    opacity: 0.75;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    color: #ff6b7d;
+}
+
+.binary-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.bit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 60, 80, 0.4);
+    border-radius: 10px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-family: 'Courier New', monospace;
+    color: #fff;
+}
+
+.legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-right: 1rem;
+}
+
+.legend-bit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-family: monospace;
+}
+
+.legend-bit.on  { background: #4ade80; color: #065f46; }
+.legend-bit.off { background: rgba(255, 255, 255, 0.25); color: #fff; }
+
+/* ============================================
+   12. ФЛАЖКИ (СЕТКА)
+   ============================================ */
+.checkbox-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.checkbox-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.1rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 60, 80, 0.3);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    min-width: 70px;
+}
+
+.checkbox-item:hover {
+    background: rgba(255, 60, 80, 0.15);
+    transform: translateY(-2px);
+}
+
+.checkbox-item .form-check-input {
+    width: 1.6rem;
+    height: 1.6rem;
+    margin: 0;
+    cursor: pointer;
+}
+
+.checkbox-num {
+    font-size: 0.85rem;
+    opacity: 0.75;
+    font-weight: 600;
+}
+
+.checkbox-item.correct {
+    background: rgba(74, 222, 128, 0.25);
+    border-color: #4ade80;
+    box-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
+}
+
+.checkbox-item.wrong {
+    background: rgba(248, 113, 113, 0.2);
+    border-color: #f87171;
+    box-shadow: 0 0 12px rgba(248, 113, 113, 0.35);
+}
+
+/* ============================================
+   13. СООБЩЕНИЯ О СТАТУСЕ
+   ============================================ */
+.status-message {
+    margin-top: 1.5rem;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-align: center;
+    min-height: 0;
+    transition: all 0.3s ease;
+}
+
+.status-message:empty {
+    padding: 0;
+    margin-top: 0;
+}
+
+.status-message.pending {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px dashed rgba(255, 100, 120, 0.4);
+}
+
+.status-message.success {
+    background: rgba(74, 222, 128, 0.25);
+    border: 1px solid #4ade80;
+    color: #fff;
+}
+
+.status-message.wrong-msg {
+    background: rgba(248, 113, 113, 0.2);
+    border: 1px solid #f87171;
+    color: #fff;
+}
+
+/* ============================================
+   14. РАДИОКНОПКИ В ЗАДАНИЯХ
+   ============================================ */
+.quiz-radio {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+    margin-top: 0.3rem;
+}
+
+.form-check-label {
+    cursor: pointer;
+    padding-left: 0.4rem;
+    color: #fff;
+}
+
+.form-check {
+    color: #fff;
+}
+
+.form-check-input {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-color: rgba(255, 60, 80, 0.5);
+}
+
+.form-check-input:checked {
+    background-color: #ff1e3c;
+    border-color: #ff1e3c;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 30, 60, 0.35);
+}
+
+/* ============================================
+   15. ТЕКСТОВЫЕ ПОЛЯ И SELECT
+   ============================================ */
+.form-label {
+    font-weight: 600;
+    color: #fff;
+    opacity: 0.95;
+}
+
+.form-control,
+.form-select {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 60, 80, 0.3);
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    color: #333;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.form-control::placeholder {
+    color: #999;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: #fff;
+    border-color: #ff6b7d;
+    box-shadow: 0 0 0 0.25rem rgba(255, 30, 60, 0.35);
+    color: #333;
+}
+
+.form-control.is-valid {
+    background-image: none;
+    border-color: #4ade80;
+    box-shadow: 0 0 0 0.2rem rgba(74, 222, 128, 0.25);
+}
+
+.form-control.is-invalid {
+    background-image: none;
+    border-color: #f87171;
+    box-shadow: 0 0 0 0.2rem rgba(248, 113, 113, 0.25);
+}
+
+/* ============================================
+   16. TOGGLE / SWITCH
+   ============================================ */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    height: 38px;
+    margin: 0 auto;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 60, 80, 0.4);
+    border-radius: 38px;
+    transition: 0.4s;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    left: 4px;
+    bottom: 4px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.4s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: #ff1e3c;
+    border-color: #ff1e3c;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(32px);
+}
+
+/* ============================================
+   17. ТЁМНАЯ ТЕМА (усиленная версия для 7.html)
+   ============================================ */
+body.dark-theme {
+    background: #000;
+    background-image:
+        radial-gradient(circle at 15% 20%, rgba(140, 0, 0, 0.3) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(80, 0, 0, 0.4) 0%, transparent 50%);
+    color: #e0e0e0;
+}
+
+body.dark-theme .hero-card {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 40, 60, 0.25);
+}
+
+/* ============================================
+   18. СЛАЙДЕР
+   ============================================ */
+.form-range {
+    width: 100%;
+    height: 1.5rem;
+    padding: 0;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.form-range::-webkit-slider-runnable-track {
+    height: 8px;
+    background: rgba(255, 60, 80, 0.3);
+    border-radius: 4px;
+}
+
+.form-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    margin-top: -8px;
+    background: #ff1e3c;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(255, 30, 60, 0.6);
+    transition: transform 0.2s ease;
+}
+
+.form-range::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+}
+
+.form-range::-moz-range-track {
+    height: 8px;
+    background: rgba(255, 60, 80, 0.3);
+    border-radius: 4px;
+}
+
+.form-range::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: #ff1e3c;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(255, 30, 60, 0.6);
+}
+
+/* ============================================
+   19. МОДАЛЬНОЕ ОКНО
+   ============================================ */
+.modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    color: #333;
+}
+
+.modal-header {
+    border-bottom: 1px solid #eee;
+    padding: 1.2rem 1.5rem;
+}
+
+.modal-title {
+    color: #333;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    font-size: 1.05rem;
+    color: #333;
+}
+
+.modal-footer {
+    border-top: 1px solid #eee;
+    padding: 1rem 1.5rem;
+}
+
+/* ============================================
+   20. БЛОК ПЕРЕХОДА НА СЛЕДУЮЩИЙ УРОВЕНЬ
+   ============================================ */
+.next-step-box {
+    margin-top: 2rem;
+    padding: 2rem 1.5rem;
+    background: linear-gradient(135deg, rgba(255, 30, 60, 0.18), rgba(255, 140, 0, 0.18));
+    border: 2px solid rgba(255, 30, 60, 0.5);
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.next-step-box.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.next-step-box::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 20px;
+    padding: 2px;
+    background: linear-gradient(135deg, #ff1e3c, #ff8c00, #ff4d67, #ff1e3c);
+    background-size: 300% 300%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: borderFlow 4s linear infinite;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+@keyframes borderFlow {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+}
+
+.next-step-icon {
+    font-size: 3rem;
+    color: #ff4d67;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    animation: pop 0.6s ease;
+}
+
+.next-step-title {
+    font-weight: 800;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(255, 30, 60, 0.4);
+}
+
+.next-step-text {
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+}
+
+.btn-next-level {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #ff2d4a, #c0001a);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+    border-radius: 50px;
+    box-shadow: 0 8px 25px rgba(255, 30, 60, 0.4);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    animation: pulseBtn 2s ease-in-out infinite;
+}
+
+@keyframes pulseBtn {
+    0%, 100% { box-shadow: 0 8px 25px rgba(255, 30, 60, 0.4); }
+    50%      { box-shadow: 0 8px 35px rgba(255, 30, 60, 0.7); }
+}
+
+.btn-next-level:hover {
+    transform: translateY(-3px) scale(1.03);
+    color: #fff;
+    text-decoration: none;
+    animation-play-state: paused;
+    box-shadow: 0 12px 40px rgba(255, 30, 60, 0.8);
+}
+
+.btn-next-level i {
+    font-size: 1.3rem;
+    transition: transform 0.3s ease;
+}
+
+.btn-next-level:hover i {
+    transform: translateX(6px);
+}
+
+.btn-next-level::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn-next-level:hover::after {
+    left: 100%;
+}
+
+/* ============================================
+   21. ФУТЕР
+   ============================================ */
+footer {
+    position: relative;
+    z-index: 5;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+footer a {
+    color: #b08080;
+    text-decoration: none;
+    font-weight: 500;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    border-bottom: 1px dashed rgba(255, 40, 60, 0.4);
+    padding-bottom: 2px;
+}
+
+footer a:hover {
+    opacity: 1;
+    color: #ff4d67;
+    border-bottom-color: #ff1e3c;
+    letter-spacing: 0.5px;
+}
+
+footer i {
+    margin-right: 0.4rem;
+    color: #ff1e3c;
+}
+
+/* ============================================
+   22. ВСПОМОГАТЕЛЬНЫЕ КЛАССЫ
+   ============================================ */
+kbd {
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 0.85em;
+    border: 1px solid rgba(255, 60, 80, 0.4);
+}
+
+.btn-outline-light {
+    border-color: rgba(255, 100, 120, 0.6);
+    color: #fff;
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 30, 60, 0.15);
+    border-color: #ff1e3c;
+    color: #fff;
+}
+
+/* ============================================
+   23. СТРАНИЦА "О ПРОЕКТЕ"
+   ============================================ */
+.about-card {
+    max-width: 700px;
+}
+
+.about-icon {
+    font-size: 4rem;
+    color: #ff6b7d;
+    display: inline-block;
+    text-shadow: 0 4px 20px rgba(255, 30, 60, 0.5);
+}
+
+.about-text {
+    font-size: 1.15rem;
+    opacity: 0.95;
+    line-height: 1.7;
+}
+
+.about-author {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 60, 80, 0.3);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+}
+
+.about-author-name {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(255, 30, 60, 0.4);
+}
+
+.about-author-class {
+    font-size: 1.1rem;
+    opacity: 0.85;
+    margin: 0;
+    color: #ff6b7d;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================
+   24. БЛОК С ПРОБЛЕМОЙ
+   ============================================ */
+.about-problem {
+    position: relative;
+    background: rgba(255, 255, 255, 0.06);
+    border-left: 4px solid #ff4d67;
+    border-radius: 12px;
+    padding: 1.5rem 1.5rem 1.5rem 3.5rem;
+    margin: 1.5rem 0;
+}
+
+.about-quote-icon {
+    position: absolute;
+    top: 1.2rem;
+    left: 1rem;
+    font-size: 1.8rem;
+    color: #ff4d67;
+    opacity: 0.8;
+}
+
+.about-quote {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    opacity: 0.95;
+    font-style: italic;
+}
+
+body.dark-theme .about-problem {
+    border-left-color: #ff1e3c;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+/* ============================================
+   25. АДАПТИВНОСТЬ
+   ============================================ */
+@media (max-width: 576px) {
+    .hero-card {
+        padding: 2.5rem 1.5rem;
+        border-radius: 22px;
+    }
+
+    .hero-card h1 {
+        font-size: 1.9rem;
+    }
+
+    .hero-card p {
+        font-size: 1rem;
+    }
+
+    .hero-icon {
+        font-size: 2.8rem;
+    }
+
+    .love-title {
+        letter-spacing: 2px;
+    }
+
+    .title-heart {
+        font-size: 2.5rem;
+    }
+
+    /* 3D-кнопки на мобильных */
+    .btn-3d {
+        font-size: 1rem;
+        padding: 0.9rem 1.8rem;
+        width: 100%;
+        justify-content: center;
+        margin: 0.35rem 0;
+    }
+
+    .btn-group-3d {
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .btn-start {
+        font-size: 1rem;
+        padding: 0.8rem 2rem;
+    }
+
+    .theory-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .bit {
+        width: 38px;
+        height: 38px;
+        font-size: 1.2rem;
+    }
+
+    .checkbox-item {
+        min-width: 58px;
+        padding: 0.7rem 0.85rem;
+    }
+
+    .continue-link {
+        font-size: 1rem;
+    }
+
+    .toggle-switch {
+        width: 60px;
+        height: 34px;
+    }
+
+    .toggle-slider::before {
+        width: 24px;
+        height: 24px;
+    }
+
+    .toggle-switch input:checked + .toggle-slider::before {
+        transform: translateX(26px);
+    }
+
+    .demo-block {
+        padding: 1rem;
+    }
+
+    .next-step-box {
+        padding: 1.5rem 1rem;
+    }
+
+    .next-step-title {
+        font-size: 1.3rem;
+    }
+
+    .next-step-icon {
+        font-size: 2.5rem;
+    }
+
+    .btn-next-level {
+        font-size: 1rem;
+        padding: 0.85rem 1.5rem;
+    }
+
+    .about-icon {
+        font-size: 3rem;
+    }
+
+    .about-author-name {
+        font-size: 1.3rem;
+    }
+
+    .about-author-class {
+        font-size: 1rem;
+    }
+
+    .about-problem {
+        padding: 1.2rem 1rem 1.2rem 2.8rem;
+    }
+
+    .about-quote-icon {
+        font-size: 1.4rem;
+        top: 1rem;
+        left: 0.8rem;
+    }
+
+    .about-quote {
+        font-size: 0.95rem;
+    }
+
+    /* Сердца на мобильных чуть меньше */
+    .heart-shape {
+        filter: brightness(0.95);
+    }
+}
